@@ -1,0 +1,40 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3" style="background-color: #fffbea">
+
+
+
+
+<h1 class="d-flex justify-content-center">나의 기록</h1>
+
+
+
+    <section class="container">
+
+<div class="d-flex justify-content-evenly">
+    <div class="col-sm-6 col-lg-3" >
+    <div class="card" style="width: 18rem;">
+        <img th:src="@{/2025-01-04.01.jpeg}" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">오늘 일기</h5>
+            <p class="card-text">일기를 작성한다는 건 하루를 마무리 한다는 것.</p>
+            <a th:href="@{/diary/create}" class="btn btn-primary">하루를 마무리 </a>
+        </div>
+    </div>
+</div>
+    <div class="col-sm-6 col-lg-3" >
+        <div class="card" style="width: 18rem;">
+            <img th:src="@{/2025-01-04.jpeg}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">일기목록</h5>
+                <p class="card-text">지나온 나를 되돌아보기.</p>
+                <a th:href="@{/diary/list}" class="btn btn-primary">그날을 떠올리며</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</section>
+
+</div>
+</html>

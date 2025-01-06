@@ -1,0 +1,27 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+
+    <h1>로그인 페이지 입니다</h1>
+
+    <form th:action="@{/user/login}" method="post">
+
+
+        <div th:if="${param.error}">
+            <div class="alert alert-danger">
+                ID또는 PASSWORD가 틀렸습니다.</div>
+        </div>
+        <label for="username" class="form-label">ID</label>
+        <input type="text" name="username" id="username" class="form-control">
+
+        <label for="password" class="form-label">PASSWORD</label>
+        <input type="password" name="password" id="password" class="form-control">
+
+
+        <button type="submit" class="btn btn-primary" >로그인</button>
+
+    </form>
+
+</div>
+
+
+</html>

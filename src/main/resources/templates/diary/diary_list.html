@@ -1,0 +1,51 @@
+<html layout:decorate="~{layout}" >
+<div layout:fragment="content" class="container my-3" style="background-color: #fffbea">
+
+
+        <h1 class="fw-bold text-center my-5 py-5">Diary list</h1>
+
+
+
+
+    <section class="container">
+        <div class="card p-4 m-5">
+
+<table class="justify-content-center">
+
+    <thead>
+    <tr class="mb-3">
+        <th scope="col">#</th>
+        <th scope="col">작성자</th>
+        <th scope="col">제목</th>
+        <th scope="col">내용</th>
+        <th scope="col">작성일</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr th:each=" diary , loop: ${paging}">
+        <td th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}"></td>
+        <td th:text="${diary.username}"></td>
+        <td th:text="${diary.subject}"></td>
+        <td th:text="${diary.content}"></td>  <!--줄바꿈 태그 utext-->
+        <td th:text="${#temporals.format(diary.createDateTime, 'yyyy-MM-dd HH:mm')}"></td>
+    </tr>
+    </tbody>
+</table>
+
+        </div>
+
+        <div class="d-grid gap-2 col-3 mx-auto">
+            <a th:href="@{/diary/create}" class="btn btn-primary">일기작성  하러가기</a>
+
+            <a th:href="@{/diary/main}" class="btn btn-primary">뒤로가기</a>
+        </div>
+
+    </section>
+
+
+
+</div>
+</html>
+
+
