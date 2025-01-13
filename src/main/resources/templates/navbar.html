@@ -13,6 +13,8 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" th:href="@{/notice/list}">공지사항</a></li>
                         <li><a class="dropdown-item" th:href="@{/question/list}">질문게시판</a></li>
+                        <li><a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{/user/infor}">개인정보</a></li>
+
 
                     </ul>
                 </li>
