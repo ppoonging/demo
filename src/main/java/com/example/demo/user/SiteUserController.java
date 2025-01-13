@@ -5,10 +5,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -16,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SiteUserController {
 
 
-    private final SiteUserSerevice diaryUserService;
+    private final SiteUserSerevice siteUserSerevice;
 
 
     @GetMapping("/signup")
@@ -30,29 +33,36 @@ public class SiteUserController {
         if (bindingResult.hasErrors()) {
             return "signup_form";
         }
-        if(!diaryUserForm.getPassword1().equals(diaryUserForm.getPassword2())){
+        if (!diaryUserForm.getPassword1().equals(diaryUserForm.getPassword2())) {
             bindingResult.rejectValue("passwword2", "passwordError", "두 개의 비밀번호가 다릅니다.");
             return "signup_form";
         }
-        try{
-            diaryUserService.create(diaryUserForm.getMyName() ,diaryUserForm.getUsername()
-                , diaryUserForm.getPassword1(), diaryUserForm.getEmail(), diaryUserForm.getPhoneNumber());
+        try {
+            siteUserSerevice.create(diaryUserForm.getMyName(), diaryUserForm.getUsername()
+                    , diaryUserForm.getPassword1(), diaryUserForm.getEmail(), diaryUserForm.getPhoneNumber());
 
-        }catch(DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
-            bindingResult.reject("fall","이미 등록된 사용자입니다");
+            bindingResult.reject("fall", "이미 등록된 사용자입니다");
             return "signup_form";
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            bindingResult.reject("fall",e.getMessage());
+            bindingResult.reject("fall", e.getMessage());
             return "signup_form";
         }
-        return"redirect:/";
+        return "redirect:/";
     }
+
     @GetMapping("/login")
     public String login() {
         return "login_form";
     }
 
 
+    @GetMapping("/infor")
+    public String infor(Model model, Principal principal) {
+        SiteUser siteUser = this.siteUserSerevice.getUser(principal.getName());
+        model.addAttribute("siteUser", siteUser);
+        return "ins/infor_form";
+    }
 }

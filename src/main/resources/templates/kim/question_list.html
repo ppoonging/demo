@@ -1,0 +1,62 @@
+<html layout:decorate="~{layout}">
+	<div layout:fragment="content" class="container my-3">
+		
+
+	<table class="table">
+	  <thead class="table-dark">
+	    <tr>
+	     <td>번호</td>
+		 <td>제목</td>
+		 <td>김찬혁</td>
+		 <td>작성일시</td>
+	    </tr>
+	  </thead>
+	  <tbody>
+		<tr th:each="gangQuestion , loop : ${paging}">
+			<td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
+			<td><a th:href="@{|/kquestion/detail/${gangQuestion.id}|}"
+				th:text="${gangQuestion.subject}"></a>
+				
+				
+			<span class="text-danger small ms-2" th:if="${#lists.size(gangQuestion.answerList) > 0}"
+				th:text="${#lists.size(gangQuestion.answerList)}"></span>
+			</td>
+			<td><span th:if="${gangQuestion.author != null}"
+			th:text="${gangQuestion.author.username}"></span></td>
+			
+			<td th:text="${#temporals.format(gangQuestion.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+		</tr>
+	   
+		
+	  </tbody>
+	</table>
+	
+	<!--페이징 처리 시작-->
+	<div th:if="${!paging.isEmpty()}">
+		<ul class="pagination iustify-content-center">
+			<li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+				<a class="page-link" th:href="@{|?page=${paging.number-1}|}">
+					<span>이전</span>
+				</a>
+			</li>
+			<li th:each="page : ${#numbers.sequence(0, paging.totalPages-1)}"
+			th:if="${page >= paging.number-2 and page <= paging.number +2}"
+			th:classappend="${page == paging.number} ? 'active'" class="page-item">
+			<a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+		</li>
+		<li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+			<a class="page-link" th:href="@{|?page=${paging.number+1}|}">
+				<span>다음</span>
+			</a>
+		</li>
+		</ul>
+	</div>
+	
+	
+	
+	
+
+	<a th:href="@{/kquestion/create}" class="btn btn-primary">질문 등록하기</a>
+
+	</div>
+</html>

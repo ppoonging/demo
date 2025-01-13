@@ -22,11 +22,11 @@ public class SiteUser {
     @Column(unique = true)
     private String myName;  //
 
-
     private String password;
 
     @Column(unique = true)
     private String email;
+
 
     @Column(unique = true)
     private String phoneNumber;

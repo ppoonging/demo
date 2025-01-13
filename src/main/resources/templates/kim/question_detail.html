@@ -1,0 +1,99 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+
+
+	<h2 class="border-bottom py-2" th:text="${gangQuestion.subject}"></h2>
+	
+	
+	<div th:text="${gangQuestion.content}"></div>
+
+	<!--버튼이다 이자식아-->
+	<div class="my-3">
+		<a href="javascript:void(0);" class="recommend btn btn-sm btn-outline-secondary"
+		th:data-uri="@{|/kquestion/vote/${gangQuestion.id}|}">추천
+		<span class="badge rounded-pill bg-success" th:text="${#lists.size(gangQuestion.voter)}"></span></a>
+	
+			<a th:href="@{|/kquestion/modify/${gangQuestion.id}|}" class="btn btn-sm btn-outline-secondary"
+			sec:authorize="isAuthenticated()"
+			th:if="${gangQuestion.author != null and #authentication.getPrincipal().getUsername() == gangQuestion.author.username}"
+			th:text="수정"></a>
+			
+			<a href="javascript:void(0);"
+			th:data-uri="@{|/kquestion/delete/${gangQuestion.id}|}" class="delete btn btn-sm btn-outline-secondary"
+			sec:authorize="isAuthenticated()"
+			th:if="${gangQuestion.author != null and #authentication.getPrincipal().getUsername == gangQuestion.author.username}"
+			th:text="삭제"></a>
+		</div>
+
+	<h5 th:text="|${#lists.size(gangQuestion.answerList)} 개의 답변이 있습니다|"></h5>
+
+
+	<div class="card my-3" th:each="gangAnswer : ${gangQuestion.answerList}">
+			<div class="card-text" style="white-space: pre-line;" th:text="${gangAnswer.content}"></div>
+			<div class="d-flex justify-content-end">
+				<div class="badge bg-light text-dark p-2 text-start">
+					<div class="mb-2">
+						<span th:if="${gangQuestion.author != null}"
+						th:text="${gangQuestion.author.username}"></span>
+					</div>
+					<div th:text="${#temporals.format(gangAnswer.createDate, 'yyyy-MM-dd HH:mm')}"></div>	
+					</div>
+	</div>
+	
+			<div class="my-3">
+				
+				<a href="javascript:void(0);" class="recommend btn btn-sm btn-outline-secondary"
+						th:data-uri="@{|/kanswer/vote/${gangAnswer.id}|}">추천
+						<span class="badge rounded-pill bg-success" th:text="${#lists.size(gangAnswer.voter)}"></span></a>
+						
+			<a th:href="@{|/kanswer/modify/${gangAnswer.id}|}" class="btn btn-sm btn-outline-secondary"
+			sec:authorize="isAuthenticated()"
+			th:if="${gangAnswer.author != null and #authentication.getPrincipal().getUsername() == gangAnswer.author.username}"
+			th:text="수정"></a>
+		
+			<a href="javascript:void(0);"
+						th:data-uri="@{|/kanswer/delete/${gangAnswer.id}|}" class="delete btn btn-sm btn-outline-secondary"
+						sec:authorize="isAuthenticated()"
+						th:if="${gangAnswer.author != null and #authentication.getPrincipal().getUsername == gangAnswer.author.username}"
+						th:text="삭제"></a>	
+			</div>
+			</div>
+		
+
+		<!--수정하기-->
+
+	<!--답변 작성-->
+<form class="my-3" th:action="@{|/kanswer/create/${gangQuestion.id}|}" method="post" th:object="${gangAnswerForm}">
+		 <textarea sec:authorize="isAnonymous()" disabled class="form-control" name="content" id="content"></textarea>
+		<textarea sec:authorize="isAuthenticated()"  name="content" id="content" class="form-control" rows="10"></textarea>
+		<input class="btn btn-primary" type="submit" value="답변 등록">
+		
+		
+	<!-- 이거 풀면 ㅈ됨	<div th:replace="~{form_errors :: formErrorsFragment}"></div>
+-->		
+	</form>
+
+	</div>
+
+	
+	<script layout:fragment="script" type="text/javascript">
+		const delete_elements = document.getElementsByClassName("delete");
+		Array.from(delete_elements).forEach(function(element) {
+			element.addEventListener('click', function(){
+			if(confirm("정말로 삭제할겨?")){
+				location.href=this.dataset.uri;
+				};
+				});
+				});
+				
+				const recommend_elements = document.getElementsByClassName("recommend");
+				Array.from(recommend_elements).forEach(function(element){
+					element.addEventListener("click", function() {
+						if(confirm("추천 ㄱ?")) {
+							location.href=this.dataset.uri;
+						};
+					});
+				});
+	</script>
+	
+</html>

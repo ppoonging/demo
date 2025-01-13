@@ -6,10 +6,6 @@
 
     <form  th:action="@{/diary/create}" method="post" th:object="${diaryForm}" >
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
-    <div class="mb-3">
-    <label for="username" class="form-label">이름</label>
-    <input type="text" name="username" id="username" class="form-control">
-    </div>
 
     <div class="mb-3">
     <label for="subject" class="form-label">제목</label>

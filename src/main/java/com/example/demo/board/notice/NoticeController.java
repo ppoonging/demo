@@ -74,15 +74,17 @@ public class NoticeController {
         model.addAttribute("user", user);
 
         noticeForm.setSubject(notice.getSubject());
-        noticeForm.setContent(notice.getContent());
+        noticeForm.setContent(notice.getContent().replace("<br/>","\n"));
 
         return "notice/notice_form";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
-    public String modifyNotice(@PathVariable("id") Integer id, @Valid NoticeForm noticeForm, BindingResult bindingResult, Principal principal) {
+    public String modifyNotice(@PathVariable("id") Integer id, @Valid NoticeForm noticeForm, BindingResult bindingResult, Principal principal, Model model) {
         Notice notice = this.noticeService.getNotice(id);
+        SiteUser user = siteUserSerevice.getUser(principal.getName());
+        model.addAttribute("user", user);
         if(!notice.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
         }

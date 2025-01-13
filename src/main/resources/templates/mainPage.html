@@ -1,6 +1,8 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
 
+
+
    <div class="d-flex justify-content-evenly">
 
        <!--민정 페이지-->
@@ -13,7 +15,7 @@
         <img th:src="@{/common.jpeg}"class="card-img-top">
 </a>
         <h5 class="card-title">공지사항</h5>
-        <p class="card-text">dsadas</p>
+        <p class="card-text">admin일때만 글쓰기가 가능하게 만든 게시판입니다.</p>
     </div>
 </div>
 
@@ -27,7 +29,7 @@
                 <img th:src="@{/common.jpeg}"class="card-img-top">
             </a>
             <h5 class="card-title">일기장</h5>
-            <p class="card-text"></p>
+            <p class="card-text">일기쓰는 게시판을 만들었습니다.</p>
         </div>
     </div>
 
@@ -38,11 +40,11 @@
            <div class="card-header">승용</div>
 
            <div class="card-body text-primary">
-               <a th:href="@{/diary/main}">
+               <a th:href="@{/question/list}">
                    <img th:src="@{/common.jpeg}"class="card-img-top">
                </a>
-               <h5 class="card-title">미정</h5>
-               <p class="card-text"></p>
+               <h5 class="card-title">게시판</h5>
+               <p class="card-text">파일을 업로드 할 수 있는 게시판입니다.</p>
            </div>
        </div>
 
@@ -53,11 +55,11 @@
            <div class="card-header">찬혁</div>
 
            <div class="card-body text-primary">
-               <a th:href="@{/diary/main}">
+               <a th:href="@{/kquestion/list}">
                    <img th:src="@{/common.jpeg}"class="card-img-top">
                </a>
-               <h5 class="card-title">미정</h5>
-               <p class="card-text"></p>
+               <h5 class="card-title">찬혁</h5>
+               <p class="card-text">수정,삭제,추천 기능이 들어간 게시판입니다.</p>
            </div>
        </div>
 
@@ -68,11 +70,11 @@
            <div class="card-header">상후</div>
 
            <div class="card-body text-primary">
-               <a th:href="@{/diary/main}">
+               <a th:href="@{/inQuestion/list}">
                    <img th:src="@{/common.jpeg}"class="card-img-top">
                </a>
-               <h5 class="card-title">미정</h5>
-               <p class="card-text"></p>
+               <h5 class="card-title">상후</h5>
+               <p class="card-text">수정,삭제,추천 기능이 들어간 게시판입니다.</p>
            </div>
        </div>
 

@@ -1,0 +1,19 @@
+<html layout:decorate="~{layout}">
+    <div layout:fragment="content">
+
+
+<form th:action="@{|/inAnswer/create/${inQuestion.id}|}" method="post"  th:object="${inAnswerForm}">
+	
+	<div th:replace="~{form_errors ::formErrorsFragment}"></div>
+	
+	
+	<textarea sec:authorize="isAnonymous()" disabled class="form-control" name="content" id="content"></textarea>
+	<textarea sec:authorize="isAuthenticated()"  class="form-control" th:field="*{content}" rows="15"></textarea>
+	
+	
+	<input class="btn btn-primary" type="submit" value="답변등록">
+</form>
+
+
+   </div>
+</html>

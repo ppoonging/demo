@@ -9,9 +9,6 @@ import lombok.Setter;
 @Setter
 public class DiaryForm {
 
-    @NotEmpty(message = "이름을 입력해주세요")
-    private String username;
-
     @Size(min = 1, max = 20)
     @NotEmpty(message = "제목을 입력해주세요")
     private String subject;

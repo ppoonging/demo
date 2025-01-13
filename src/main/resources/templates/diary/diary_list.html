@@ -27,7 +27,8 @@
     <tr th:each=" diary , loop: ${paging}">
         <td th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}"></td>
         <td th:text="${diary.username}"></td>
-        <td th:text="${diary.subject}"></td>
+       <td> <a th:href="@{|/diary/detail/${diary.id}|}" th:text="${diary.subject}"></a></td>
+        <!--<td th:text="${diary.subject}"></td>-->
         <td th:text="${diary.content}"></td>  <!--줄바꿈 태그 utext-->
         <td th:text="${#temporals.format(diary.createDateTime, 'yyyy-MM-dd HH:mm')}"></td>
     </tr>

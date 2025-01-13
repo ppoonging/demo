@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+    <style>
+        /* Circle image styling */
+        .circle-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Profile card styling */
+        .profile-card {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .table td,
+        .table th {
+            border: none;
+        }
+
+        .table-primary {
+            background-color: #e9ecef;
+        }
+
+        /* Centered content */
+        .centered {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container centered">
+        <!-- Profile header -->
+        <h1 class="my-4 border-bottom pb-2">프로필</h1>
+
+        <!-- Profile image -->
+     <!--   <img th:src="@{/상후.jpg}" alt="원형 이미지" class="circle-image">-->
+
+        <!-- Profile card with table -->
+        <div class="profile-card">
+            <table class="table">
+                <tr class="table-primary">
+                    <td><strong>아이디</strong></td>
+                    <td th:text="${siteUser.username}"></td>
+                </tr>
+                <tr>
+                    <td><strong>이메일</strong></td>
+                    <td th:text="${siteUser.email}"></td>
+                </tr>
+
+                <tr>
+                    <td><strong>전화번호</strong></td>
+                    <td th:text="${siteUser.phoneNumber}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

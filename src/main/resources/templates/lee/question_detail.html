@@ -1,0 +1,150 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">	
+
+    <!-- 질문 -->
+    <h2 class="border-bottom py-2" th:text="${question.subject}"></h2>
+    <div class="card my-3">
+        <div class="card-body">
+            <div class="card-text" style="white-space: pre-line;" th:text="${question.content}"></div>
+            <div class="p-1 bg-dark text-white" th:text="${question.category}"></div>
+            <div class="d-flex justify-content-end">
+                <div class="badge bg-light text-dark p-2 text-start">
+                    <div class="mb-2">
+                        <span th:if="${question.author !=null}" th:text="${question.author.username}"></span>
+                    </div>
+                    <div th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+            </div>
+            <div class="my-3">
+                <div th:text="${#temporals.format(question.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
+                <a th:href="@{|/question/modify/${question.id}|}" class="btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()" th:if="${question.author !=null and #authentication.getPrincipal().getUsername() == question.author.username}" th:text="수정"></a>
+            </div>
+            <a href="javascript:void(0);" th:data-uri="@{|/question/delete/${question.id}|}" class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()" th:if="${question.author !=null and #authentication.getPrincipal().getUsername() == question.author.username}" th:text="삭제"></a>
+            <div class="my-3">
+                <a href="javascript:void(0);" th:data-uri="@{|/question/vote/${question.id}|}" class="recommend btn btn-sm btn-outline-secondary">추천</a>
+                <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.voter)}"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 답변 갯수 표시 -->
+    <h5 class="border-bottom py-2" th:text="|${#lists.size(question.answerList)} 개의 답변이 있습니다|"></h5>
+
+    <!-- 답변 반복 시작 -->
+    <div class="card my-3" th:each="answer : ${question.answerList}">
+        <a th:id="|answer_${answer.id}|"></a>
+        <div class="card-body">
+            <div class="card-text" style="white-space: pre-line;" th:text="${answer.content}"></div>
+            <div class="d-flex justify-content-end">
+                <div class="badge bg-light text-dark p-2 text-start">
+                    <div class="mb-2">
+                        <span th:if="${answer.author !=null}" th:text="${answer.author.username}"></span>
+                    </div>
+                    <div th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+            </div>
+            <div class="my-3">
+                <a th:href="@{|/answer/modify/${answer.id}|}" class="btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()" th:if="${answer.author !=null and #authentication.getPrincipal().getUsername() == answer.author.username}" th:text="수정"></a>
+            </div>
+            <a href="javascript:void(0);" th:data-uri="@{|/answer/delete/${answer.id}|}" class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()" th:if="${answer.author !=null and #authentication.getPrincipal().getUsername() == answer.author.username}" th:text="삭제"></a>
+            <div class="my-3">
+                <a href="javascript:void(0);" th:data-uri="@{|/answer/vote/${answer.id}|}" class="recommend btn btn-sm btn-outline-secondary">추천</a>
+                <span class="badge rounded-pill bg-success" th:text="${#lists.size(answer.voter)}"></span>
+            </div>
+        </div>
+    </div>
+    <!-- 답변 반복 끝 -->
+
+    <!-- 답변 작성 -->
+    <form th:action="@{|/answer/create/${question.id}|}" method="post" th:object="${answerForm}">
+        <div th:replace="~{form_errors :: formErrorsFragment}"></div>
+        <textarea sec:authorize="isAnonymous()" disabled class="form-control" name="content" id="content"></textarea>
+        <textarea sec:authorize="isAuthenticated()" class="form-control" name="content" id="content" rows="15"></textarea>
+        <button type="submit" class="btn btn-danger">답변등록</button>
+    </form>
+
+    <!-- 채팅 기능 추가 -->
+    <h3>채팅</h3>
+    <div id="chat-messages" style="border: 1px solid #ccc; height: 200px; overflow-y: auto; padding: 10px;">
+        <!-- 채팅 메시지가 여기에 추가됩니다 -->
+    </div>
+    <input type="text" id="message-input" placeholder="메시지 입력" class="form-control my-2">
+    <button onclick="sendMessage()" class="btn btn-primary">보내기</button>
+
+    <script>
+        function sendMessage() {
+            const messageInput = document.getElementById('message-input');
+            const message = messageInput.value;
+
+            if (message.trim() !== '') {
+                const chatMessages = document.getElementById('chat-messages');
+                const newMessage = document.createElement('div');
+                newMessage.textContent = message;
+                chatMessages.appendChild(newMessage);
+                messageInput.value = ''; // 입력 필드 초기화
+                chatMessages.scrollTop = chatMessages.scrollHeight; // 스크롤을 가장 아래로
+            }
+        }
+    </script>
+
+    <div class="col-4">
+        <div class="input-group">
+            <input type="text" id="search_kw" class="form-control" th:value="${kw}">
+            <button class="btn btn-warning" type="button" id="btn_search">검색</button>
+            <a th:href="@{/question/list}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16" sec:authorize="isAuthenticated()">
+                    <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4z"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead class="table-danger">
+            <tr class="table-center">
+                <th>번호</th>
+                <td style="width:50%">제목</td>
+                <td>카테고리</td>
+                <th>글쓴이</th>
+                <th>작성일자</th>
+                <th>조회수</th>
+                <th>추천수</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="question, loop : ${paging}">
+                <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
+                <td><a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
+                    <span class="text-danger small ms-2" th:if="${#lists.size(question.answerList)>0}" th:text="${#lists.size(question.answerList)}"></span>
+                </td>
+                <td><span th:text="${question.category}"></span></td>
+                <td><span th:if="${question.author !=null}" th:text="${question.author.username}"></span></td>
+                <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${question.view}"></td>
+                <td th:text="${#lists.size(question.voter)}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- 페이징 처리 시작 -->
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!paging.hasPrevious}? 'disabled'">
+                <a class="page-link" href="javascript:void(0);" th:data-page="${paging.number-1}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page : ${#numbers.sequence(0, paging.totalPages-1)}"
+                th:if="${page >= paging.number-2 and page <= paging.number +2}"
+                th:classappend="${page == paging.number} ? 'active'" class="page-item">
+                <a th:text="${page}" class="page-link" href="javascript:void(0);" th:data-page="${page}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0);" th:data-page="${paging.number+1}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+</html>

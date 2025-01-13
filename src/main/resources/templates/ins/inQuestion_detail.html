@@ -1,0 +1,151 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+
+
+	
+<!--질문-->
+
+<h2 class="border-bottom py-2" th:text="${inQuestion.subject}"></h2>
+<div class="card my -3">
+   <div class="card-body">
+      <div class="card-text" style="white-space: pre-line;" th:text="${inQuestion.content}"></div>
+	   <div class="d-flex justify-content-end">
+		
+	
+		
+		<div class="badge bg-light text-dark p-2 text-start">
+			
+			
+			<div class="mb-2">
+			  수정시간
+				<div th:text="${#temporals.format(inQuestion.modifyDate,'yyyy-MM-dd-HH:mm')}"></div>
+			</div>
+			
+			
+			
+			<div class="mb-2">
+				 <span th:if="${inQuestion.author !=null}"
+				 th:text="${inQuestion.author.username}"></span>					
+		    </div>
+			
+			
+			 <div th:text="${#temporals.format(inQuestion.createDate,'yyyy-MM-dd-HH:mm')}"></div>
+		    </div>
+		 </div>
+		 
+		 
+		 
+		 
+		
+		  <div class="my-3">
+			
+			
+			<a th:href="@{|/inAnswer/create/${inQuestion.id}|}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-dots-fill" viewBox="0 0 16 16">
+			  <path d="M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0m4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+			</svg></a>
+			
+			
+			
+			<a href="javascript:void(0);" th:data-uri="@{|/inQuestion/vote/${inQuestion.id}|}"
+			class="recommend btn btn-sm btn-outline-secondary">추천
+		     <span class="badge rounded-pill bg-success" th:text="${#lists.size(inQuestion.voter)}"></span></a>
+		       
+			
+			
+			<a th:href="@{|/inQuestion/modify/${inQuestion.id}|}" class="btn btn-sm btn-outline-secondary"
+			sec:authorize="isAuthenticated()"
+			th:if="${inQuestion.author != null and #authentication.getPrincipal().getUsername() == inQuestion.author.username}"
+			th:text="수정"></a>
+            		
+		    <a href="javascript:void(0);"
+			th:data-uri="@{|/inQuestion/delete/${inQuestion.id}|}" class="delete btn btn-sm btn-outline-secondary"
+			sec:authorize="isAuthenticated()"
+			th:if="${inQuestion.author != null and #authentication.getPrincipal().getUsername() == inQuestion.author.username}"
+			th:text="삭제"></a>
+		
+		 </div>
+
+      </div>
+   </div>
+<!--답변 개수 표시-->
+<h5 class="border-bottom py-2" th:text="|${#lists.size(inQuestion.answerList)} 개의 답변이 있습니다|"></h5>
+
+<!--답변의 반복 시작-->
+<div class="card my-3" th:each="inAnswer : ${inQuestion.answerList}">
+	<!--앵커기능 추가-->
+	<a th:id="|inAnswer_${inAnswer.id}|"></a>
+	
+	<div class="card-body">
+		<div class="card-text" style="white-space: pre-line;" th:text="${inAnswer.content}"></div>
+		<div class="d-flex justify-content-end">
+			<div class="badge bg-light text-dark p-2 text-start">
+				
+				<div class="mb-2">
+					<span th:if="${inQuestion.author !=null}"
+					th:text="${inQuestion.author.username}"></span>					
+				</div>
+				
+				
+				<div th:text="${#temporals.format(inAnswer.createDate,'yyyy-MM-dd HH:mm')}">
+					
+				</div>
+				
+		      
+			</div>
+		</div>
+	
+		<div class="my-3">
+			<a href="javascript:void(0);" class="recommend btn btn-sm btn-outline-secondary"
+			th:data-uri="@{|/inAnswer/vote/${inAnswer.id}|}">추천
+		    <span class="badge rounded-pill bg-success" th:text="${#lists.size(inAnswer.voter)}"></span>
+		    </a>
+		</div>
+		
+		
+		
+		
+		
+		
+		<div class="my-3">
+				<a th:href="@{|/inAnswer/modify/${inAnswer.id}|}" class="btn btn-sm btn-outline-secondary"
+				sec:authorize="isAuthenticated()"
+				th:if="${inAnswer.author != null and #authentication.getPrincipal().getUsername() == inAnswer.author.username}"
+				th:text="수정"></a>
+				
+				<a href="javascript:void(0);"
+						th:data-uri="@{|/inAnswer/delete/${inAnswer.id}|}" class="delete btn btn-sm btn-outline-secondary"
+						sec:authorize="isAuthenticated()"
+						th:if="${inAnswer.author != null and #authentication.getPrincipal().getUsername() == inAnswer.author.username}"
+						th:text="삭제"></a>
+					
+			
+			
+			
+			
+			</div>		
+		
+		
+</div>
+</div>
+<!--답변의 반복 끝-->
+
+
+
+
+</div>
+
+
+
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
